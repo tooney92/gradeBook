@@ -4,40 +4,70 @@ using System.Collections.Generic;
 
 namespace GradeBook
 {
-    class Book
+    public   class Book
     {
-        private List<double> grades = new List<double>();
-        private string name;
+        public List<double> grades = new List<double>();
+        public string Name;
 
         public Book(string name)
         {
-            this.name = name;
+            Name = name;
+        }
+
+        public void AddLetterGrade(char letter)
+        {
+            switch (letter)
+            {
+                case 'A':
+                    AddGrade(90);
+                    break;
+
+                case 'B':
+                    AddGrade(80);
+                    break;
+
+                case 'C':
+                    AddGrade(70);
+                    break;
+                default:
+                    AddGrade(0);
+                    break;
+            }
         }
 
         public void AddGrade(double grade)
         {
-            grades.Add(grade);
+            if (grade <= 100 && grade >= 0)
+            {
+                grades.Add(grade);
+            }
+
+            else
+            {
+                throw new ArgumentException($"{grade} is an invalid grade. Grades between 0-100 are allowed.");
+            }
             //Console.WriteLine($"grades added {grade}");
         }
 
-        public void ShowStatistics()
+        public Statistics GetStatistics()
         {
-            // TODO: get the highest grade
+            // TODO: get the highest grade  
             // TODO: get the lowest grade
             // TODO: compute the average
-            double lowestValue = double.MaxValue;
-            double highestValue = double.MinValue;
-            double sum = 0.0;
+            Statistics result = new Statistics();
+            result.Low = double.MaxValue;
+            result.High = double.MinValue;
+            result.Average = 0.0;
 
             foreach (var number in grades)
             {
-                lowestValue = Math.Min(number, lowestValue);
-                highestValue = Math.Max(number, highestValue);
-                sum += number;
-
+                result.Low = Math.Min(number, result.Low);
+                result.High = Math.Max(number, result.High);
+                result.Average += number;
             }
 
-            Console.WriteLine($"min value: {lowestValue}, max value: {highestValue} average: {sum / 5:N1}");
+            result.Average /= grades.Count ;
+            return result;
 
         }
     }

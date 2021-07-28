@@ -13,22 +13,47 @@ namespace GradeBook
 
             while (true)
             {
-                Console.WriteLine("Please provide a number(double): ");
-                var userInput = Console.ReadLine();
-                double userNumber = double.Parse(userInput);
-                book.AddGrade(userNumber);
+                Console.WriteLine("Enter a grade or 'q' to quit");
+                String userInput = Console.ReadLine();
 
-
-                Console.WriteLine("Are you done?");
-                var answer = Console.ReadLine();
-
-                if (answer.StartsWith("y"))
+                if (userInput.StartsWith('q'))
                 {
+                    Console.WriteLine(".... bye");
                     break;
                 }
+
+                //bool validInput = double.TryParse(userInput, out double result);
+                //if(!validInput)
+                //{
+                //    Console.WriteLine("valid doubles only!");
+                //    break;
+                //}
+                try
+                {
+                    var grade = double.Parse(userInput);
+                    book.AddGrade(grade);
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+                catch (FormatException e)
+                {
+                    Console.WriteLine("invalid format. Please use doubles");
+                }
+
+                finally
+                {
+                    Console.WriteLine("**");
+                }
+
+                //book.AddGrade(double.Parse(userInput));
+
             }
 
-            book.ShowStatistics();
+            var stats = book.GetStatistics();
+            stats.printStats();
 
         }
     }
